@@ -1,0 +1,9 @@
+{
+    "name": "github-actions-prod",
+    "issuer": "https://token.actions.githubusercontent.com",
+    "subject": "repo:Aaditya1998/HCLHealthcare.Booking:environment:production",
+    "description": "GitHub Actions for production environment",
+    "audiences": [
+        "api://AzureADTokenExchange"
+    ]
+}
