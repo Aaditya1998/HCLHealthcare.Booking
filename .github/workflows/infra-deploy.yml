@@ -1,8 +1,8 @@
-name: Infrastructure Deployment
 on:
   push:
     paths: ['terraform/**']
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   id-token: write
