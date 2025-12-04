@@ -45,4 +45,5 @@ jobs:
       
       - name: Deploy to K8s
         run: |
-          kubectl set image deployment/hclbooking hclbooking=${{ secrets.ACR_LOGIN_SERVER }}/hclbooking:${{ github.sha }}
+          sed -i "s|hclbooking:latest|${{ secrets.ACR_LOGIN_SERVER }}/hclbooking:${{ github.sha }}|g" k8s/manifests.yaml
+          kubectl apply -f k8s/manifests.yaml
