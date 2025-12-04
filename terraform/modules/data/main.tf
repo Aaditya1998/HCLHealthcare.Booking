@@ -16,8 +16,8 @@ resource "azurerm_mssql_server" "main" {
 resource "azurerm_mssql_database" "main" {
   name           = "HCLHealthcareBooking"
   server_id      = azurerm_mssql_server.main.id
-  sku_name       = "HS_Gen5_2" # Hyperscale
-  zone_redundant = true
+  sku_name       = "Basic"
+  zone_redundant = false
 }
 
 resource "azurerm_private_endpoint" "sql" {
