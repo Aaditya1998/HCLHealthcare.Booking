@@ -6,9 +6,8 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "main" {
-  name     = "rg-hcl-booking"
-  location = "East US"
+data "azurerm_resource_group" "main" {
+  name = "rg-hcl-booking"
 }
 
 module "network" {
