@@ -34,6 +34,14 @@ resource "azurerm_private_endpoint" "sql" {
   }
 }
 
+resource "azurerm_container_registry" "acr" {
+  name                = "acrhclbooking${random_id.server.hex}"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  sku                 = "Basic"
+  admin_enabled       = true
+}
+
 resource "random_id" "server" {
   byte_length = 4
 }
