@@ -9,9 +9,6 @@ resource "azurerm_kubernetes_cluster" "main" {
     node_count = 3
     vm_size    = "Standard_D2s_v3"
     vnet_subnet_id = var.vnet_subnet_id
-    enable_auto_scaling = true
-    min_count = 3
-    max_count = 10
   }
 
   identity {
@@ -20,6 +17,5 @@ resource "azurerm_kubernetes_cluster" "main" {
 
   network_profile {
     network_plugin = "azure"
-    network_policy = "azure"
   }
 }
