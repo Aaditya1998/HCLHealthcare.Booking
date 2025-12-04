@@ -1,0 +1,207 @@
+@model HCLHealthcare.Booking.Models.Doctor
+
+@{
+    ViewData["Title"] = "Book Appointment";
+    var slots = ViewBag.TimeSlots as List<HCLHealthcare.Booking.Models.TimeSlot>;
+}
+
+<div class="container mt-4">
+    <!-- Progress Bar -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="position-relative m-4">
+                <div class="progress" style="height: 2px;">
+                    <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;">1</button>
+                <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;">2</button>
+                <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
+                
+                <div class="position-absolute top-100 start-0 translate-middle text-center mt-2" style="width: 100px;"><small>Select Doctor</small></div>
+                <div class="position-absolute top-100 start-50 translate-middle text-center mt-2" style="width: 100px;"><small class="fw-bold">Book Slot</small></div>
+                <div class="position-absolute top-100 start-100 translate-middle text-center mt-2" style="width: 100px;"><small>Confirm</small></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <!-- Doctor Profile Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
+                <div class="card-body text-center">
+                    <img src="https://ui-avatars.com/api/?name=@Model.User?.FullName&background=random&size=128" class="rounded-circle mb-3" alt="Doctor" />
+                    <h4 class="card-title text-primary">
+                        @Model.User?.FullName
+                        @if (Model.IsPrime)
+                        {
+                            <span class="badge bg-success align-middle" style="font-size: 0.5em;"><i class="bi bi-patch-check-fill"></i> Prime</span>
+                        }
+                    </h4>
+                    <p class="text-muted mb-1">@Model.Specialization?.Name</p>
+                    <p class="small text-muted">@Model.Experience Experience</p>
+                    
+                    <hr />
+                    
+                    <div class="d-flex justify-content-between px-3">
+                        <div class="text-center">
+                            <h6 class="mb-0 text-success">@Model.Rating%</h6>
+                            <small class="text-muted">Rating</small>
+                        </div>
+                        <div class="text-center">
+                            <h6 class="mb-0">@Model.PatientStoriesCount</h6>
+                            <small class="text-muted">Stories</small>
+                        </div>
+                        <div class="text-center">
+                            <h6 class="mb-0">₹@Model.ConsultationFee</h6>
+                            <small class="text-muted">Fee</small>
+                        </div>
+                    </div>
+                    
+                    <hr />
+                    <p class="mb-0"><i class="bi bi-geo-alt-fill text-danger"></i> @Model.Center?.Name</p>
+                    <small class="text-muted">@Model.Center?.Location</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slot Selection -->
+        <div class="col-md-8">
+            <h4 class="mb-4">Select a Time Slot</h4>
+            
+            @if (ViewBag.NextAvailableMessage != null)
+            {
+                <div class="alert alert-warning">
+                    <i class="bi bi-calendar-x"></i> @ViewBag.NextAvailableMessage
+                </div>
+            }
+
+            @if (slots != null && slots.Any())
+            {
+                var groupedSlots = slots.GroupBy(s => s.StartTime.Date).OrderBy(g => g.Key).Take(3);
+                
+                <ul class="nav nav-tabs mb-3" id="slotTabs" role="tablist">
+                    @foreach (var group in groupedSlots.Select((g, i) => new { Group = g, Index = i }))
+                    {
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link @(group.Index == 0 ? "active" : "")" id="tab-@group.Index" data-bs-toggle="tab" data-bs-target="#content-@group.Index" type="button" role="tab">
+                                @group.Group.Key.ToString("ddd, MMM dd")
+                                <span class="badge bg-light text-dark ms-1">@group.Group.Count() slots</span>
+                            </button>
+                        </li>
+                    }
+                </ul>
+
+                <div class="tab-content" id="slotTabsContent">
+                    @foreach (var group in groupedSlots.Select((g, i) => new { Group = g, Index = i }))
+                    {
+                        <div class="tab-pane fade @(group.Index == 0 ? "show active" : "")" id="content-@group.Index" role="tabpanel">
+                            @{
+                                var morningSlots = group.Group.Where(s => s.StartTime.Hour < 12).ToList();
+                                var afternoonSlots = group.Group.Where(s => s.StartTime.Hour >= 12 && s.StartTime.Hour < 16).ToList();
+                                var eveningSlots = group.Group.Where(s => s.StartTime.Hour >= 16).ToList();
+                            }
+
+                            @if (morningSlots.Any())
+                            {
+                                <h6 class="mt-3"><i class="bi bi-sun"></i> Morning</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var slot in morningSlots)
+                                    {
+                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#bookingModal" data-slot-id="@slot.Id" data-slot-time="@slot.StartTime.ToString("hh:mm tt")">
+                                            @slot.StartTime.ToString("hh:mm tt")
+                                        </button>
+                                    }
+                                </div>
+                            }
+
+                            @if (afternoonSlots.Any())
+                            {
+                                <h6 class="mt-3"><i class="bi bi-brightness-high"></i> Afternoon</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var slot in afternoonSlots)
+                                    {
+                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#bookingModal" data-slot-id="@slot.Id" data-slot-time="@slot.StartTime.ToString("hh:mm tt")">
+                                            @slot.StartTime.ToString("hh:mm tt")
+                                        </button>
+                                    }
+                                </div>
+                            }
+
+                            @if (eveningSlots.Any())
+                            {
+                                <h6 class="mt-3"><i class="bi bi-moon"></i> Evening</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var slot in eveningSlots)
+                                    {
+                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#bookingModal" data-slot-id="@slot.Id" data-slot-time="@slot.StartTime.ToString("hh:mm tt")">
+                                            @slot.StartTime.ToString("hh:mm tt")
+                                        </button>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <p class="text-muted">No slots available for the next few days.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Appointments" asp-action="Book" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You are booking an appointment with <strong>@Model.User?.FullName</strong>.</p>
+                    <p>Time: <strong id="modalSlotTime"></strong></p>
+                    <p>Consultation Fee: <strong>₹@Model.ConsultationFee</strong></p>
+                    
+                    <input type="hidden" name="slotId" id="modalSlotId" />
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Appointment Type</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="appointmentType" id="typeInPerson" value="In-Person" checked>
+                            <label class="btn btn-outline-primary" for="typeInPerson"><i class="bi bi-person-fill"></i> In-Person</label>
+
+                            <input type="radio" class="btn-check" name="appointmentType" id="typeVideo" value="Video">
+                            <label class="btn btn-outline-primary" for="typeVideo"><i class="bi bi-camera-video-fill"></i> Video Call</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm & Pay</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var bookingModal = document.getElementById('bookingModal')
+        bookingModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            var slotId = button.getAttribute('data-slot-id')
+            var slotTime = button.getAttribute('data-slot-time')
+            
+            var modalSlotId = bookingModal.querySelector('#modalSlotId')
+            var modalSlotTime = bookingModal.querySelector('#modalSlotTime')
+            
+            modalSlotId.value = slotId
+            modalSlotTime.textContent = slotTime
+        })
+    </script>
+}

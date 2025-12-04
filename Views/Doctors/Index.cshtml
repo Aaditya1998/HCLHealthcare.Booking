@@ -1,0 +1,109 @@
+@model IEnumerable<HCLHealthcare.Booking.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Find a Doctor";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Find a Doctor</h2>
+
+    <form method="get" class="row g-3 mb-5 p-4 bg-light rounded shadow-sm">
+        <div class="col-md-5">
+            <label class="form-label">Select Center</label>
+            <select name="centerId" class="form-select" asp-items="ViewBag.Centers">
+                <option value="">-- All Centers --</option>
+            </select>
+        </div>
+        <div class="col-md-5">
+            <label class="form-label">Select Specialization</label>
+            <select name="specializationId" class="form-select" asp-items="ViewBag.Specializations">
+                <option value="">-- All Specializations --</option>
+            </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </form>
+
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center">
+                <p class="text-muted">No doctors found matching your criteria.</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-12 mb-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8 border-end">
+                                    <div class="d-flex align-items-start">
+                                        <div class="me-3">
+                                            <img src="https://ui-avatars.com/api/?name=@item.User?.FullName&background=random&size=100" class="rounded-circle" alt="Doctor" />
+                                        </div>
+                                        <div>
+                                            <h5 class="card-title text-primary mb-1">
+                                                @item.User?.FullName
+                                                @if (item.IsPrime)
+                                                {
+                                                    <span class="badge bg-success ms-2" title="Verified Prime Doctor"><i class="bi bi-patch-check-fill"></i> Prime</span>
+                                                }
+                                            </h5>
+                                            <p class="text-muted mb-1">@item.Specialization?.Name</p>
+                                            <p class="small text-muted mb-2">@item.Experience Experience</p>
+                                            
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge bg-success me-2"><i class="bi bi-star-fill"></i> @item.Rating%</span>
+                                                <span class="text-muted small">@item.PatientStoriesCount Patient Stories</span>
+                                            </div>
+
+                                            <p class="mb-1"><strong>@item.Center?.Name</strong> <span class="text-muted small">(@item.Center?.Location)</span></p>
+                                            <p class="mb-0"><strong>₹@item.ConsultationFee</strong> <span class="text-muted small">Consultation Fee</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-center text-muted mb-3">Available Slots</h6>
+                                    
+                                    @if (item.TimeSlots != null && item.TimeSlots.Any())
+                                    {
+                                        var todaySlots = item.TimeSlots.Where(t => t.StartTime.Date == DateTime.Today).Take(3).ToList();
+                                        if (todaySlots.Any())
+                                        {
+                                            <div class="d-grid gap-2">
+                                                @foreach (var slot in todaySlots)
+                                                {
+                                                    <a asp-controller="Doctors" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">
+                                                        @slot.StartTime.ToString("hh:mm tt")
+                                                    </a>
+                                                }
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-link btn-sm text-decoration-none">View all slots</a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-center">
+                                                <p class="text-muted small">No slots today</p>
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Check Availability</a>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="text-center mt-4">
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Book Appointment</a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

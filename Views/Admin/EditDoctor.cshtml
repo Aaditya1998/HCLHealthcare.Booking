@@ -1,0 +1,69 @@
+@model HCLHealthcare.Booking.Models.Doctor
+
+@{
+    ViewData["Title"] = "Edit Doctor";
+}
+
+<div class="container mt-4">
+    <h2>Edit Doctor</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="EditDoctor">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="UserId" />
+
+                <div class="mb-3">
+                    <label class="control-label">Full Name</label>
+                    <input name="fullName" value="@Model.User?.FullName" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SpecializationId" class="control-label">Specialization</label>
+                    <select asp-for="SpecializationId" class="form-control" asp-items="ViewBag.SpecializationId"></select>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="CenterId" class="control-label">Center</label>
+                    <select asp-for="CenterId" class="form-control" asp-items="ViewBag.CenterId"></select>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="Experience" class="control-label"></label>
+                    <input asp-for="Experience" class="form-control" />
+                    <span asp-validation-for="Experience" class="text-danger"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="Qualifications" class="control-label"></label>
+                    <input asp-for="Qualifications" class="form-control" />
+                    <span asp-validation-for="Qualifications" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ConsultationFee" class="control-label"></label>
+                    <input asp-for="ConsultationFee" class="form-control" />
+                    <span asp-validation-for="ConsultationFee" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Rating" class="control-label"></label>
+                    <input asp-for="Rating" class="form-control" />
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsPrime" /> @Html.DisplayNameFor(model => model.IsPrime)
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="ManageDoctors" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

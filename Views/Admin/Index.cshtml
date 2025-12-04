@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">🛡️ Admin Dashboard</h1>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h1 class="display-4 text-primary"><i class="bi bi-people"></i></h1>
+                    <h5 class="card-title">Manage Doctors</h5>
+                    <p class="card-text">Add, edit, or remove doctor profiles.</p>
+                    <a asp-action="ManageDoctors" class="btn btn-outline-primary">Go to Doctors</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h1 class="display-4 text-success"><i class="bi bi-hospital"></i></h1>
+                    <h5 class="card-title">Manage Centers</h5>
+                    <p class="card-text">Update healthcare center locations.</p>
+                    <a asp-action="ManageCenters" class="btn btn-outline-success">Go to Centers</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h1 class="display-4 text-warning"><i class="bi bi-bandaid"></i></h1>
+                    <h5 class="card-title">Specializations</h5>
+                    <p class="card-text">Manage medical specializations.</p>
+                    <a href="#" class="btn btn-outline-warning disabled">Coming Soon</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

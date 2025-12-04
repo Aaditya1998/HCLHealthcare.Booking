@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="bg-primary text-white py-5 mb-5" style="background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); border-radius: 0 0 50px 50px;">
+    <div class="container text-center py-5">
+        <h1 class="display-3 fw-bold mb-3">Your Home for Health</h1>
+        <p class="lead mb-5 opacity-75">Find and book appointments with the best doctors near you.</p>
+
+        <div class="card shadow-lg border-0 mx-auto" style="max-width: 800px;">
+            <div class="card-body p-2">
+                <form asp-controller="Doctors" asp-action="Index" method="get" class="row g-2 align-items-center">
+                    <div class="col-md-3 border-end">
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-geo-alt text-primary"></i></span>
+                            <input type="text" class="form-control border-0" placeholder="Location" value="Noida" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" class="form-control border-0" placeholder="Search doctors, clinics, hospitals, etc.">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <span class="opacity-75 me-2">Popular Searches:</span>
+            <a asp-controller="Doctors" asp-action="Index" asp-route-specializationId="1" class="badge bg-white text-primary text-decoration-none p-2 me-1 rounded-pill">Cardiology</a>
+            <a asp-controller="Doctors" asp-action="Index" asp-route-specializationId="2" class="badge bg-white text-primary text-decoration-none p-2 me-1 rounded-pill">Dermatology</a>
+            <a asp-controller="Doctors" asp-action="Index" asp-route-specializationId="3" class="badge bg-white text-primary text-decoration-none p-2 me-1 rounded-pill">General Physician</a>
+            <a asp-controller="Doctors" asp-action="Index" asp-route-specializationId="4" class="badge bg-white text-primary text-decoration-none p-2 me-1 rounded-pill">Pediatrics</a>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row text-center g-4">
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                <div class="card-body">
+                    <div class="mb-3 text-primary"><i class="bi bi-camera-video" style="font-size: 2rem;"></i></div>
+                    <h5 class="card-title">Video Consult</h5>
+                    <p class="card-text text-muted small">Connect within 60 secs</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                <div class="card-body">
+                    <div class="mb-3 text-success"><i class="bi bi-capsule" style="font-size: 2rem;"></i></div>
+                    <h5 class="card-title">Medicines</h5>
+                    <p class="card-text text-muted small">Essentials at your doorstep</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                <div class="card-body">
+                    <div class="mb-3 text-info"><i class="bi bi-clipboard-pulse" style="font-size: 2rem;"></i></div>
+                    <h5 class="card-title">Lab Tests</h5>
+                    <p class="card-text text-muted small">Sample pickup at home</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                <div class="card-body">
+                    <div class="mb-3 text-warning"><i class="bi bi-hospital" style="font-size: 2rem;"></i></div>
+                    <h5 class="card-title">Surgeries</h5>
+                    <p class="card-text text-muted small">Safe and trusted centers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+        transition: all .3s ease;
+    }
+</style>

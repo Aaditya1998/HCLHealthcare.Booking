@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "AI Symptom Checker";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-primary"><i class="bi bi-robot"></i> AI Health Assistant</h1>
+        <p class="lead">Tell us how you feel, and we'll suggest the right specialist for you.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <form asp-action="Analyze" method="post">
+                        <h4 class="mb-4">Select your symptoms:</h4>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-check custom-checkbox">
+                                    <input class="form-check-input" type="checkbox" name="symptoms" value="Chest Pain" id="s1">
+                                    <label class="form-check-label" for="s1">Chest Pain</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="symptoms" value="Shortness of Breath" id="s2">
+                                    <label class="form-check-label" for="s2">Shortness of Breath</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="symptoms" value="Skin Rash" id="s3">
+                                    <label class="form-check-label" for="s3">Skin Rash / Itching</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="symptoms" value="Fever" id="s4">
+                                    <label class="form-check-label" for="s4">Fever</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="symptoms" value="Cough" id="s5">
+                                    <label class="form-check-label" for="s5">Persistent Cough</label>
+                                </div>
+                            </div>
+                             <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="symptoms" value="Child" id="s6">
+                                    <label class="form-check-label" for="s6">Patient is a Child (< 12)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-5">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill">
+                                <i class="bi bi-magic"></i> Analyze Symptoms
+                            </button>
+                        </div>
+                    </form>
+                    
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger mt-3">@ViewBag.Error</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
