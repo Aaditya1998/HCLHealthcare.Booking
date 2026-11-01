@@ -48,4 +48,7 @@ jobs:
       - name: Deploy to K8s
         run: |
           sed -i "s|hclbooking:latest|${{ secrets.ACR_LOGIN_SERVER }}/hclbooking:${{ github.sha }}|g" k8s/manifests.yaml
+          kubectl create secret generic hclbooking-secrets \
+            --from-literal=sql-connection-string="${{ secrets.SQL_CONNECTION_STRING }}" \
+            --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f k8s/manifests.yaml

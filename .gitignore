@@ -1,0 +1,23 @@
+# Build output
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Local databases & logs
+*.db
+*.db-shm
+*.db-wal
+*.log
+
+# Secrets / local config
+appsettings.*.local.json
+.env
+*.pfx
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/*.tfvars
